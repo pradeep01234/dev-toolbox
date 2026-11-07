@@ -1,0 +1,16 @@
+{
+  "name": "dev-toolbox",
+  "displayName": "Dev Toolbox",
+  "version": "0.1.0",
+  "description": "Free offline developer utilities for Claude: UUIDs, hashing, base64, and timestamp conversion.",
+  "author": { "name": "Pradeep" },
+  "license": "MIT",
+  "icon": "./.claude-plugin/icon.png",
+  "keywords": ["mcp", "utilities", "uuid", "hash", "base64", "timestamp"],
+  "mcpServers": {
+    "dev-toolbox": {
+      "command": "python3",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/main.py"]
+    }
+  }
+}

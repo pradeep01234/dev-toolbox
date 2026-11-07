@@ -1,0 +1,12 @@
+{
+  "name": "pradeep-tools",
+  "description": "Free Claude plugins by Pradeep",
+  "owner": { "name": "Pradeep" },
+  "plugins": [
+    {
+      "name": "dev-toolbox",
+      "source": "./",
+      "description": "Free offline developer utilities: UUIDs, hashing, base64, and timestamp conversion."
+    }
+  ]
+}
