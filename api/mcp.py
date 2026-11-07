@@ -1,10 +1,15 @@
-"""dev-toolbox: zero-dependency MCP server (stdio, newline-delimited JSON-RPC)."""
+"""dev-toolbox: zero-dependency MCP server over Streamable HTTP (stateless, JSON responses).
+
+Runs as a Vercel Python function at /api/mcp, or locally with `python api/mcp.py` (port 8000).
+"""
 import base64
 import hashlib
 import json
-import sys
 import uuid
 from datetime import datetime, timezone
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+MAX_BODY = 1_000_000  # bytes; public endpoint, reject oversized requests
 
 PROTOCOL_VERSION = "2025-06-18"
 RO = {"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False}
@@ -92,18 +97,47 @@ def handle(msg):
     return {"jsonrpc": "2.0", "id": mid, "result": result}
 
 
-def main():
-    for line in sys.stdin:
-        if not line.strip():
-            continue
+class handler(BaseHTTPRequestHandler):  # Vercel looks for this exact name
+    def _send(self, code, body=None):
+        self.send_response(code)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept, Mcp-Protocol-Version, Mcp-Session-Id")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        if body is None:
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
+        data = json.dumps(body).encode()
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def do_OPTIONS(self):
+        self._send(204)
+
+    def do_GET(self):  # no server-initiated SSE stream; spec allows 405
+        self.send_response(405)
+        self.send_header("Allow", "POST")
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+
+    def do_POST(self):
+        length = int(self.headers.get("Content-Length") or 0)
+        if length > MAX_BODY:
+            return self._send(413, {"jsonrpc": "2.0", "id": None, "error": {"code": -32600, "message": "Request too large"}})
         try:
-            resp = handle(json.loads(line))
-        except json.JSONDecodeError:
-            resp = {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "Parse error"}}
-        if resp:
-            sys.stdout.write(json.dumps(resp) + "\n")
-            sys.stdout.flush()
+            msg = json.loads(self.rfile.read(length))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return self._send(400, {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "Parse error"}})
+        if not isinstance(msg, dict):
+            return self._send(400, {"jsonrpc": "2.0", "id": None, "error": {"code": -32600, "message": "Invalid request"}})
+        resp = handle(msg)
+        self._send(202) if resp is None else self._send(200, resp)
+
+    def log_message(self, *args):  # don't log request contents
+        pass
 
 
 if __name__ == "__main__":
-    main()
+    HTTPServer(("127.0.0.1", 8000), handler).serve_forever()

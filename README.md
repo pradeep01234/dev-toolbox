@@ -1,38 +1,17 @@
-# Dev Toolbox
+# dev-toolbox
 
-Dev Toolbox is a free Claude Code plugin. It bundles a small local MCP server that gives Claude a few developer utilities. Everything runs on your own machine. The server makes no network requests, collects no data, and reads or writes no files. It uses only the Python standard library, so you don't need to install any packages.
+This repository holds two things:
 
-## Tools
+- [`plugin/`](plugin/) is the Claude Code plugin. It contains only JSON and Markdown and points Claude Code at the hosted MCP server. This folder is what gets submitted to the Claude plugin directory.
+- [`api/mcp.py`](api/mcp.py) is the MCP server. It uses only the Python standard library and runs as a Vercel Python function at `/api/mcp`.
 
-All tools are read-only.
-
-| Tool | What it does |
-|------|--------------|
-| `generate_uuid` | Generates 1 to 100 random UUID v4 strings |
-| `hash_text` | Hashes text with md5, sha1, sha256 or sha512 |
-| `base64_encode` | Encodes UTF-8 text as base64 |
-| `base64_decode` | Decodes base64 back to UTF-8 text |
-| `convert_timestamp` | Converts Unix seconds to ISO 8601 and back. With no value, it returns the current time |
-
-## Requirements
-
-You need Python 3.8 or later available as `python3` on your PATH.
-
-## Install
+Install the plugin:
 
 ```
 claude plugin marketplace add pradeep01234/dev-toolbox
 claude plugin install dev-toolbox@pradeep-tools
 ```
 
-## What it runs
+Run the server locally with `python api/mcp.py`, which serves `http://127.0.0.1:8000`. Run the smoke test with `python test_mcp.py`.
 
-The plugin starts `python3 main.py` as a stdio MCP server. Claude sends it JSON-RPC requests on stdin, and the server answers on stdout. It does nothing else.
-
-## Privacy
-
-The plugin collects, stores and sends no data. See [PRIVACY.md](PRIVACY.md).
-
-## License
-
-MIT. See [LICENSE](LICENSE).
+MIT licensed.

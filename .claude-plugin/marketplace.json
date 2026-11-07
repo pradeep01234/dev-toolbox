@@ -5,8 +5,8 @@
   "plugins": [
     {
       "name": "dev-toolbox",
-      "source": "./",
-      "description": "Free offline developer utilities: UUIDs, hashing, base64, and timestamp conversion."
+      "source": "./plugin",
+      "description": "Free developer utilities: UUIDs, hashing, base64, and timestamp conversion."
     }
   ]
 }

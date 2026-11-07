@@ -1,21 +1,21 @@
 {
   "name": "dev-toolbox",
   "displayName": "Dev Toolbox",
-  "version": "0.1.0",
-  "description": "Free offline developer utilities for Claude: UUIDs, hashing, base64, and timestamp conversion.",
+  "version": "0.2.0",
+  "description": "Free developer utilities for Claude: UUIDs, hashing, base64, and timestamp conversion.",
   "author": { "name": "Pradeep" },
   "license": "MIT",
   "icon": "./.claude-plugin/icon.png",
   "homepage": "https://github.com/pradeep01234/dev-toolbox",
   "repository": "https://github.com/pradeep01234/dev-toolbox",
-  "documentationUrl": "https://github.com/pradeep01234/dev-toolbox#readme",
+  "documentationUrl": "https://github.com/pradeep01234/dev-toolbox/tree/main/plugin#readme",
   "supportUrl": "https://github.com/pradeep01234/dev-toolbox/issues",
-  "privacyPolicyUrl": "https://github.com/pradeep01234/dev-toolbox/blob/main/PRIVACY.md",
+  "privacyPolicyUrl": "https://github.com/pradeep01234/dev-toolbox/blob/main/plugin/PRIVACY.md",
   "keywords": ["mcp", "utilities", "uuid", "hash", "base64", "timestamp"],
   "mcpServers": {
     "dev-toolbox": {
-      "command": "python3",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/main.py"]
+      "type": "http",
+      "url": "https://dev-toolbox-jade-rho.vercel.app/api/mcp"
     }
   }
 }
