@@ -21,7 +21,7 @@ You need Python 3.8 or later available as `python3` on your PATH.
 ## Install
 
 ```
-claude plugin marketplace add <github-owner>/<repo>
+claude plugin marketplace add pradeep01234/dev-toolbox
 claude plugin install dev-toolbox@pradeep-tools
 ```
 

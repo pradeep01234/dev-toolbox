@@ -6,6 +6,11 @@
   "author": { "name": "Pradeep" },
   "license": "MIT",
   "icon": "./.claude-plugin/icon.png",
+  "homepage": "https://github.com/pradeep01234/dev-toolbox",
+  "repository": "https://github.com/pradeep01234/dev-toolbox",
+  "documentationUrl": "https://github.com/pradeep01234/dev-toolbox#readme",
+  "supportUrl": "https://github.com/pradeep01234/dev-toolbox/issues",
+  "privacyPolicyUrl": "https://github.com/pradeep01234/dev-toolbox/blob/main/PRIVACY.md",
   "keywords": ["mcp", "utilities", "uuid", "hash", "base64", "timestamp"],
   "mcpServers": {
     "dev-toolbox": {
